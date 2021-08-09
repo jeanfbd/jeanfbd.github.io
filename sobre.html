@@ -85,5 +85,17 @@
   <script src="js/jquery-3.5.1.min.js"></script>
   <script src="js/main.js"></script>
   <script src="js/tagueamento.js"></script>
+  <script>
+    var form = document.getElementsByClassName('contato')[0];
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      ga('send', 'event', 'contato', 'enviado', 'enviado',{
+        hitCallback: function() {
+          form.submit();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
