@@ -5,58 +5,71 @@
 // para fazer a sua coleta.
 // Caso tenha alguma dúvida sobre o case, não hesite em entrar em contato.
 
-// (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-//     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-//     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-//     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+//Função de Integração com Google Analytics Utilizada em PROD
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics_debug.js','ga');
-    
-    //ga('create', 'UA-12345-6', 'auto');
-    ga('create', 'UA-12345-6', 'none');
-    ga('send', 'pageview');
+ga('create', 'UA-12345-6', 'auto');
 
-    window.ga_debug = {trace: true};
+function sendEventGA (eventCategory, eventAction, eventLabel) {
+	ga('send', 'event', eventCategory, eventAction, eventLabel);
+}
 
-    function myFunction() {
-        document.getElementById('nome').placeholder = document.getElementById('email').placeholder;
-    }
+window.addEventListener('load', function () {
+	ga('send', 'pageview', location.pathname);
+});
 
-var form = document.getElementById('contato');
+$(".menu-lista li.menu-lista-item a").each(function(){
+    $(this).click(function(e){
+		const index = $(this).parent().index();
+		console.log($(this).parent().index());
+		let eventCategory = 'menu';
+		if (index === 3) {
+			sendEventGA(eventCategory, 'entre_em_contato', 'link_externo');
+		}
+		if (index === 4) {
+			sendEventGA(eventCategory, 'download_pdf', 'download_pdf');
+		} 
+	});
+});
 
-var telefone = document.getElementById('telefone');
-telefone.onchange = function(){
-    ga('send', 'event', 'contato', 'enviado', 'enviado');
-};
-
-form.addEventListener('submit', function(e) {
-    e.preventDefault(); //prevent the form from submitting immediately
-
-    //Send the event to Google Analytics, and then manually
-    //submit the form
-    ga('send', 'event', 'contato', 'enviado', 'enviado', 10, {
-            hitCallback: function() {
-                form.submit(); //submit the form now
-            }
+$(".cards-montadoras div").each(function(){
+	$(this).click(function(e){
+		const index = $(this).index();
+		console.log($(this).index());
+		let eventCategory = 'analise';
+		let eventAction = 'ver_mais';
+		if (index === 0) {
+			sendEventGA(eventCategory, eventAction, 'lorem');
+		}
+		if (index === 1) {
+			sendEventGA(eventCategory, eventAction, 'ipsum');
+		} 
+		if (index === 2) {
+			sendEventGA(eventCategory, eventAction, 'dolor');
+		} 
     });
 });
 
-var trackOutboundLink = function(url) {
-    gtag('event', 'click', {
-      'event_category': 'outbound',
-      'event_label': url,
-      'transport_type': 'beacon',
-      'event_callback': function(){document.location = url;}
-    });
-  }
 
+$("#nome").keypress(function() {
+	sendEventGA('contato', 'nome', 'preencheu');
+});
 
-//   document.addEventListener('scroll', () => {
-//     if typeof window.ga !== undefined {
-//        // sua implementação aqui e mais o evento
-//        ga('send', 'event', 'Category', 'Scroll', 'Label', 'Value');
-//     }
-//   })
+$("#email").keypress(function() {
+	sendEventGA('contato', 'email', 'preencheu');
+});
+
+$("#telefone").keypress(function() {
+	sendEventGA('contato', 'telefone', 'preencheu');
+});
+
+$("#aceito").each(function(){
+    $(this).click(function(e){
+		if (this.checked) {
+			sendEventGA('contato', 'aceito', 'preencheu');
+		}
+	});
+});
