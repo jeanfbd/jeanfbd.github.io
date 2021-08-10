@@ -24,7 +24,6 @@ window.addEventListener('load', function () {
 $(".menu-lista li.menu-lista-item a").each(function(){
     $(this).click(function(e){
 		const index = $(this).parent().index();
-		console.log($(this).parent().index());
 		let eventCategory = 'menu';
 		if (index === 3) {
 			sendEventGA(eventCategory, 'entre_em_contato', 'link_externo');
@@ -38,7 +37,6 @@ $(".menu-lista li.menu-lista-item a").each(function(){
 $(".cards-montadoras div").each(function(){
 	$(this).click(function(e){
 		const index = $(this).index();
-		console.log($(this).index());
 		let eventCategory = 'analise';
 		let eventAction = 'ver_mais';
 		if (index === 0) {
